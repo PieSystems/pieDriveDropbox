@@ -1,9 +1,8 @@
-package test;
+
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.pieShare.pieDrive.adapter.dropbox.DropboxAdapter;
 import org.pieShare.pieDrive.adapter.dropbox.configuration.DropboxAdapterConfig;
@@ -13,8 +12,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.UUID;
+import org.junit.Test;
+import org.pieShare.pieDrive.adapter.exceptions.AdaptorException;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -70,7 +70,11 @@ public class DropboxAdapterTest {
 
         try {
             in = new FileInputStream(testFile);
-            dbxClient.upload(pieFile, in);
+			try{
+				dbxClient.upload(pieFile, in);
+			} catch (AdaptorException e){
+				Assert.fail();
+			}
             in.close();
         } catch (FileNotFoundException e) {
             Assert.fail();
@@ -87,7 +91,11 @@ public class DropboxAdapterTest {
 
         try {
             downFileOut = new FileOutputStream(downFile);
-            dbxClient.download(pieFile, downFileOut);
+			try{
+				dbxClient.download(pieFile, downFileOut);
+			} catch (AdaptorException e){
+				Assert.fail();
+			}
 
             if(!downFile.exists()){
                 Assert.fail();
@@ -105,7 +113,11 @@ public class DropboxAdapterTest {
     }
 
     public void testDelete(){
-        dbxClient.delete(pieFile);
+		try{
+			dbxClient.delete(pieFile);
+		} catch (AdaptorException e){
+			Assert.fail();
+		}
     }
 
 }

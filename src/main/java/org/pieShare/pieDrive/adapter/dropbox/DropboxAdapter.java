@@ -10,10 +10,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.dropbox.core.*;
-import com.dropbox.core.v2.*;
 
-import java.nio.file.Files;
-import java.util.ArrayList;
+import org.pieShare.pieDrive.adapter.exceptions.AdaptorException;
 import java.io.*;
 
 /**
@@ -27,32 +25,29 @@ public class DropboxAdapter implements Adaptor {
 
 
     @Override
-    public void delete(PieDriveFile file)  {
+    public void delete(PieDriveFile file) throws AdaptorException {
         try {
             client.files.delete("/"+file.getUuid());
         } catch (DbxException e) {
-            e.printStackTrace();
-            //TODO error handling
+            throw new AdaptorException(e);
         }
     }
 
     @Override
-    public void upload(PieDriveFile file, InputStream stream) {
+    public void upload(PieDriveFile file, InputStream stream) throws AdaptorException {
         try {
             client.files.uploadBuilder("/"+file.getUuid()).run(stream);
         } catch (DbxException|IOException e) {
-            e.printStackTrace();
-            //TODO error handling
+            throw new AdaptorException(e);
         }
     }
 
     @Override
-    public void download(PieDriveFile file, OutputStream stream) {
+    public void download(PieDriveFile file, OutputStream stream) throws AdaptorException {
         try {
             client.files.downloadBuilder("/"+file.getUuid()).run(stream);
         } catch (DbxException|IOException e) {
-            e.printStackTrace();
-            //TODO error handling
+            throw new AdaptorException(e);
         }
     }
 }
