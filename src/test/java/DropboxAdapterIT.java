@@ -19,7 +19,7 @@ import org.pieShare.pieDrive.adapter.exceptions.AdaptorException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = DropboxAdapterConfig.class)
-public class DropboxAdapterTest {
+public class DropboxAdapterIT {
 
     @Autowired
     private DropboxAdapter dbxClient;
