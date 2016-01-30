@@ -25,32 +25,16 @@ import org.pieShare.pieTools.pieUtilities.service.pieLogger.PieLogger;
  */
 public class DropboxAdapter implements Adaptor {
 
-    private String ACCESS_TOKEN = "";
-    private DbxRequestConfig config = new DbxRequestConfig("dropbox/java-tutorial", "en_US");
-    private DbxClientV2 client; 
-	
+	private DropboxAuthentication authentication;
+		
 	public DropboxAdapter(){
-		loadToken();
 		
 	}
 	
-	private void loadToken(){
-		String path = System.getProperty("user.home");
-		File pieDrive = new File(path, ".pieDrive");
-		File dropboxtoken = new File(pieDrive, "dropboxtoken");
-		
-		try{
-			ACCESS_TOKEN = new String(Files.readAllBytes(Paths.get(dropboxtoken.getAbsolutePath())));
-		} catch(IOException e){
-			
-		}
-	}
-
-
     @Override
     public void delete(PieDriveFile file) throws AdaptorException {
         try {
-            client.files.delete("/"+file.getUuid());
+            authentication.getClient().files.delete("/"+file.getUuid());
 			PieLogger.trace(DropboxAdapter.class, "{} deleted", file.getUuid());
         } catch (DbxException e) {
             throw new AdaptorException(e);
@@ -60,7 +44,7 @@ public class DropboxAdapter implements Adaptor {
     @Override
     public void upload(PieDriveFile file, InputStream stream) throws AdaptorException {
         try {
-            client.files.uploadBuilder("/"+file.getUuid()).run(stream);
+            authentication.getClient().files.uploadBuilder("/"+file.getUuid()).run(stream);
 			PieLogger.trace(DropboxAdapter.class, "{} uploaded", file.getUuid());
         } catch (DbxException|IOException e) {
             throw new AdaptorException(e);
@@ -70,22 +54,10 @@ public class DropboxAdapter implements Adaptor {
     @Override
     public void download(PieDriveFile file, OutputStream stream) throws AdaptorException {
         try {
-            client.files.downloadBuilder("/"+file.getUuid()).run(stream);
+            authentication.getClient().files.downloadBuilder("/"+file.getUuid()).run(stream);
 			PieLogger.trace(DropboxAdapter.class, "{} downloaded", file.getUuid());
         } catch (DbxException|IOException e) {
             throw new AdaptorException(e);
         }
     }
-
-	@Override
-	public boolean authenticate() {
-		client = new DbxClientV2(config, ACCESS_TOKEN);
-		try{
-			client.users.getCurrentAccount();
-		}catch(Exception e){
-			return false;
-		}
-				
-		return true;
-	}
 }
