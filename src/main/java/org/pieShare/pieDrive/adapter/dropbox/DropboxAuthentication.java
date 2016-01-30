@@ -24,7 +24,7 @@ public class DropboxAuthentication {
 		String path = System.getProperty("user.home");
 		File pieDrive = new File(path, ".pieDrive");
 		File dropboxtoken = new File(pieDrive, "dropboxtoken");
-		path = dropboxtoken.getAbsolutePath();
+		this.path = dropboxtoken.getAbsolutePath();
 	}
 	
 	public boolean authenticate(){
