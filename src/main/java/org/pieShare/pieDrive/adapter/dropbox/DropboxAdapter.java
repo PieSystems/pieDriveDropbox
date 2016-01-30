@@ -10,9 +10,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.dropbox.core.*;
+import static com.dropbox.core.v2.DbxFiles.CreateFolderError.Tag.path;
 
 import org.pieShare.pieDrive.adapter.exceptions.AdaptorException;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import org.pieShare.pieTools.pieUtilities.service.pieLogger.PieLogger;
 
 /**
@@ -20,9 +25,25 @@ import org.pieShare.pieTools.pieUtilities.service.pieLogger.PieLogger;
  */
 public class DropboxAdapter implements Adaptor {
 
-    static final String ACCESS_TOKEN = "xH3xc5-r9gAAAAAAAAAABdOYq3F9CGn0DvpdXYkLrj0Fa4zggF34i3prqVmM5qfV";
-    private DbxRequestConfig config = new DbxRequestConfig("dropbox/java-tutorial", "en_US");;
-    private DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);;
+    private String ACCESS_TOKEN = "xH3xc5-r9gAAAAAAAAAABdOYq3F9CGn0DvpdXYkLrj0Fa4zggF34i3prqVmM5qfV";
+    private DbxRequestConfig config = new DbxRequestConfig("dropbox/java-tutorial", "en_US");
+    private DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+	
+	public DropboxAdapter(){
+		loadToken();
+	}
+	
+	private void loadToken(){
+		String path = System.getProperty("user.home");
+		File pieDrive = new File(path, ".pieDrive");
+		File dropboxtoken = new File(pieDrive, "dropboxtoken");
+		
+		try{
+			ACCESS_TOKEN = new String(Files.readAllBytes(Paths.get(dropboxtoken.getAbsolutePath())));
+		} catch(IOException e){
+			
+		}
+	}
 
 
     @Override
