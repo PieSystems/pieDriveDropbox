@@ -25,12 +25,13 @@ import org.pieShare.pieTools.pieUtilities.service.pieLogger.PieLogger;
  */
 public class DropboxAdapter implements Adaptor {
 
-    private String ACCESS_TOKEN = "xH3xc5-r9gAAAAAAAAAABdOYq3F9CGn0DvpdXYkLrj0Fa4zggF34i3prqVmM5qfV";
+    private String ACCESS_TOKEN = "";
     private DbxRequestConfig config = new DbxRequestConfig("dropbox/java-tutorial", "en_US");
-    private DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+    private DbxClientV2 client; 
 	
 	public DropboxAdapter(){
 		loadToken();
+		
 	}
 	
 	private void loadToken(){
@@ -75,4 +76,16 @@ public class DropboxAdapter implements Adaptor {
             throw new AdaptorException(e);
         }
     }
+
+	@Override
+	public boolean authenticate() {
+		client = new DbxClientV2(config, ACCESS_TOKEN);
+		try{
+			client.users.getCurrentAccount();
+		}catch(Exception e){
+			return false;
+		}
+				
+		return true;
+	}
 }
