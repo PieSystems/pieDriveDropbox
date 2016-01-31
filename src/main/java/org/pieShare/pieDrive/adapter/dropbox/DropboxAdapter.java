@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import org.pieShare.pieTools.pieUtilities.service.pieLogger.PieLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,6 +32,11 @@ public class DropboxAdapter implements Adaptor {
 		
 	public DropboxAdapter(){
 		
+	}
+	
+	@PostConstruct
+	private void auth(){
+		authentication.authenticate();
 	}
 	
     @Override
