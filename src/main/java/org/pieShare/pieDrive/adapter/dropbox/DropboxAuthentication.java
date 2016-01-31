@@ -25,6 +25,8 @@ public class DropboxAuthentication {
 		File pieDrive = new File(path, ".pieDrive");
 		File dropboxtoken = new File(pieDrive, "dropboxtoken");
 		this.path = dropboxtoken.getAbsolutePath();
+		
+		this.client = new DbxClientV2(config, ACCESS_TOKEN);
 	}
 	
 	public boolean authenticate(){
