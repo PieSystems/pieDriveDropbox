@@ -19,12 +19,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import org.pieShare.pieTools.pieUtilities.service.pieLogger.PieLogger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by Roland on 30.11.2015.
  */
 public class DropboxAdapter implements Adaptor {
 
+	@Autowired
 	private DropboxAuthentication authentication;
 		
 	public DropboxAdapter(){
